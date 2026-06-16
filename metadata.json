@@ -1,0 +1,6 @@
+{
+  "name": "Electromaal",
+  "description": "Premium electronics e-commerce platform in Bangladesh. Discover the latest smartphones, laptops, and home appliances with expert service and fast delivery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
