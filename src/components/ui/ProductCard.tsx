@@ -14,22 +14,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
+  // Calculate dynamic old price for professional e-commerce feel
+  const oldPrice = product.discountPercent 
+    ? Math.round(product.price / (1 - (product.discountPercent / 100))) 
+    : Math.round(product.price * 1.25);
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4 }}
-      className="bg-white border border-gray-200/80 overflow-hidden group transition-all duration-300 hover:border-brand-orange/60 relative flex flex-col justify-between h-full"
+      className="bg-white border border-gray-200 overflow-hidden group transition-all duration-300 hover:border-brand-orange/60 hover:shadow-md relative flex flex-col justify-between h-full rounded-lg"
     >
-      {/* Circuit Trace Decorative Accents */}
-      <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-gray-300/80 pointer-events-none group-hover:border-brand-orange/50 transition-colors"></div>
-      <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-gray-300/80 pointer-events-none group-hover:border-brand-orange/50 transition-colors"></div>
-      <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-gray-300/80 pointer-events-none group-hover:border-brand-orange/50 transition-colors"></div>
-      <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-gray-300/80 pointer-events-none group-hover:border-brand-orange/50 transition-colors"></div>
-      
-      {/* Subtle Circuit Nodes on Corners */}
-      <div className="absolute top-1 left-1 w-1 h-1 rounded-full bg-gray-200 pointer-events-none group-hover:bg-brand-orange/30 transition-colors"></div>
-      <div className="absolute top-1 right-1 w-1 h-1 rounded-full bg-gray-200 pointer-events-none group-hover:bg-brand-orange/30 transition-colors"></div>
+      {/* Subtle, thin grey lines resembling a simplified circuit trace at the corners for aesthetic continuity */}
+      <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-gray-300 pointer-events-none group-hover:border-brand-orange/40 transition-colors"></div>
+      <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-gray-300 pointer-events-none group-hover:border-brand-orange/40 transition-colors"></div>
+      <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-gray-300 pointer-events-none group-hover:border-brand-orange/40 transition-colors"></div>
+      <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-gray-300 pointer-events-none group-hover:border-brand-orange/40 transition-colors"></div>
 
       <div className="flex flex-col flex-1">
         <Link to={`/product/${product.id}`} className="block relative aspect-square overflow-hidden bg-gray-50 border-b border-gray-100">
@@ -40,15 +41,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             referrerPolicy="no-referrer"
           />
           
-          {/* Custom Bright Orange Badge in Top-Right Corner */}
+          {/* Include styling for small orange "Discount" or "New" badges in the top right corner */}
           {product.badge && (
-            <span className="absolute top-2.5 right-2.5 bg-brand-orange text-brand-black text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 shadow-[0_0_10px_rgba(255,102,0,0.4)] z-20 font-display">
-              {product.badge === 'discount' && product.discountPercent ? `${product.discountPercent}% OFF` : product.badge}
+            <span className="absolute top-2 right-2 bg-brand-orange text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 shadow-sm rounded-sm z-20 font-sans">
+              {product.badge === 'discount' && product.discountPercent ? `${product.discountPercent}% OFF` : product.badge.toUpperCase()}
             </span>
           )}
 
-          {product.stock < 10 && product.stock > 0 && (
-            <span className="absolute top-2.5 left-2.5 bg-brand-black text-brand-orange border border-brand-orange/30 text-[8px] font-bold px-1.5 py-0.5 uppercase tracking-wider font-mono">
+          {product.stock < 15 && product.stock > 0 && (
+            <span className="absolute top-2 left-2 bg-brand-black/80 text-brand-orange text-[8px] font-bold px-1.5 py-0.5 uppercase tracking-wide font-mono rounded-sm">
               LOW STOCK: {product.stock}
             </span>
           )}
@@ -58,49 +59,56 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </Link>
 
         {/* Content Box */}
-        <div className="p-3 pb-4 flex-1 flex flex-col justify-between">
+        <div className="p-2.5 sm:p-3 pb-3 flex-1 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between">
-              <Link to={`/shop?category=${product.category}`} className="font-mono text-[8px] uppercase font-bold text-brand-orange hover:underline transition-all">
+            <div className="flex items-center justify-between gap-1">
+              <Link to={`/shop?category=${product.category}`} className="font-mono text-[8px] sm:text-[9px] uppercase font-bold text-gray-400 hover:text-brand-orange transition-all">
                 {product.category}
               </Link>
               {product.brand && (
-                <span className="text-[8px] uppercase tracking-wider text-gray-400 font-bold font-sans">
+                <span className="text-[8px] sm:text-[9px] uppercase tracking-wider text-brand-orange font-bold font-sans">
                   {product.brand}
                 </span>
               )}
             </div>
             
-            <Link to={`/product/${product.id}`} className="block mt-1 text-xs font-bold text-gray-900 group-hover:text-brand-orange transition-colors h-8 line-clamp-2 tracking-tight leading-tight uppercase font-sans">
+            {/* Title bold, optimized to look extremely neat and clear */}
+            <Link to={`/product/${product.id}`} className="block mt-1 text-[11px] sm:text-xs font-bold text-gray-800 hover:text-brand-orange transition-colors h-9 line-clamp-2 leading-tight tracking-normal font-sans">
               {product.name}
             </Link>
+
+            {/* Subtle Rating Indicator like Daraz */}
+            <div className="flex items-center space-x-1 mt-1">
+              <Star className="w-2.5 h-2.5 fill-amber-400 stroke-amber-400" />
+              <span className="text-[9px] text-gray-600 font-bold font-sans">{product.rating}</span>
+              <span className="text-[9px] text-gray-400 font-sans">({product.reviews})</span>
+            </div>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
-            <div className="flex flex-col">
-              <span className="font-mono text-[8px] text-gray-400 uppercase tracking-wider">UNIT_VAL</span>
-              <span className="text-sm font-black text-brand-black font-mono">
-                {formatPrice(product.price)}
+          {/* Pricing: Show a crossed-out old price and a large, bold current price in orange */}
+          <div className="mt-2.5 pt-2 border-t border-gray-100 flex flex-col justify-end">
+            <div className="flex items-baseline space-x-2 flex-wrap">
+              <span className="text-sm sm:text-base font-extrabold text-brand-orange font-sans">
+                ৳ {product.price.toLocaleString('en-BD')}
+              </span>
+              <span className="text-[9px] sm:text-xs text-gray-400 line-through font-sans">
+                ৳ {oldPrice.toLocaleString('en-BD')}
               </span>
             </div>
-            {product.specs?.wattage && (
-              <span className="bg-gray-100 text-gray-600 font-mono text-[9px] font-bold px-1.5 py-0.5 uppercase">
-                {product.specs.wattage}
-              </span>
-            )}
           </div>
         </div>
       </div>
 
-      {/* Every card has a bright orange "Add to Cart" button that spans the full width of the card's bottom */}
+      {/* Every card must have a bright orange "Add to Cart" button that spans the full width of the card's bottom */}
+      {/* CTA: 'অর্ডার করুন' (Order Now) in Hind Siliguri font */}
       <button
         onClick={() => addToCart(product)}
         disabled={product.stock === 0}
-        className="w-full py-2.5 bg-brand-orange text-brand-black font-display font-black text-[10px] uppercase tracking-widest text-center hover:bg-white border-t border-brand-orange group-hover:border-white transition-all disabled:bg-gray-200 disabled:text-gray-400 flex items-center justify-center space-x-1.5 shadow-[0_-2px_10px_rgba(255,102,0,0.1)] active:scale-[0.98]"
-        title="Add to Matrix Cart"
+        className="w-full py-2 bg-brand-orange text-white font-bengali font-bold text-xs sm:text-sm text-center hover:bg-brand-black hover:text-white border-t border-brand-orange hover:border-brand-black transition-all duration-200 disabled:bg-gray-200 disabled:text-gray-400 disabled:border-gray-200 flex items-center justify-center space-x-1 shadow-inner active:scale-[0.98]"
+        title="Add to Cart / অর্ডার করুন"
       >
         <ShoppingCart className="w-3.5 h-3.5 stroke-[2.5]" />
-        <span>{product.stock === 0 ? "OUT OF STOCK" : "ADD TO CART"}</span>
+        <span>{product.stock === 0 ? "স্টক শেষ" : "অর্ডার করুন"}</span>
       </button>
     </motion.div>
   );
